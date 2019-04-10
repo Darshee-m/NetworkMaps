@@ -78,7 +78,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		float zoomlevel=(float)18.0;
 		gmap.addMarker(new MarkerOptions()
 				.position(new LatLng(19.2020801,73.1610635))
-				.title("fuck world"));
+				.title("hello world"));
 
 
 	}
