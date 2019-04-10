@@ -21,18 +21,28 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
-
+		Data data;
+	FirebaseDatabase database ;
+	DatabaseReference myRef ;
+	List dataList;
     @Override
     public void onMapReady(GoogleMap googleMap) {
+		Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
 		gmap=googleMap;
 		MarkerOptions markerOptions = new MarkerOptions();
 
-		Toast.makeText(this, "on map ready", Toast.LENGTH_SHORT).show();
+
 		gmap.addMarker(new MarkerOptions()
 				.position(new LatLng(19, 73))
 				.title("Hello world"));
@@ -52,8 +62,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         getLocationPermission();
+        dataList=new ArrayList();
         btn=(Button)findViewById(R.id.next);
+		database = FirebaseDatabase.getInstance();
+		myRef=database.getReference("data");
     }
+
+
 	public void nextt(View v){
 		LatLng india=new LatLng(19.2020801,73.1610635);
 		CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
@@ -67,8 +82,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 	}
-    public void initMap(){
-		Toast.makeText(this, "inside map", Toast.LENGTH_SHORT).show();
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		myRef.addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+			dataList.clear();
+				for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+					Data data=dataSnapshot1.getValue(Data.class);
+					LatLng mr=new LatLng(data.lat,data.longi);
+					String title="Strength"+data.strength+" \n provider"+data.provider;
+
+					gmap.addMarker(new MarkerOptions().position(mr).title(title));
+				}
+
+
+
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+
+			}
+		});
+
+	}
+
+	public void initMap(){
 
 		SupportMapFragment mapFragment=(SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
     mapFragment.getMapAsync(MapActivity.this);
@@ -76,7 +118,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void getLocationPermission(){
-		Toast.makeText(this, "getting permission", Toast.LENGTH_SHORT).show();
+
         String[] permissions= {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
 
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
@@ -97,7 +139,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		Toast.makeText(this, "onrequest", Toast.LENGTH_SHORT).show();
         mLocation=false;
         switch(requestCode){
             case 1234:{
