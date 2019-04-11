@@ -90,11 +90,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
 
 		database = FirebaseDatabase.getInstance();
 		myRef=database.getReference("data");
-
+		myRef.setValue("this is test");
 
 	}
 	void getLocation() {
 		try {
+			Toast.makeText(this, "Searching for location", Toast.LENGTH_SHORT).show();
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
 		}
@@ -111,13 +112,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
 		//providerText.setText("provider: " + provider);
 		String info="blank";
 		info="Current Location: " + location.getLatitude() + ", " + location.getLongitude();
-		Toast.makeText(MainActivity.this,"value"+info , Toast.LENGTH_SHORT).show();
 		Context context=this;
 		getCellSignalStrength(context);
 		//String strength=String.valueOf(st)
 		strengthText.setText("Current Strength: " + String.valueOf(st));
 
-		Toast.makeText(MainActivity.this,"strength:" +String.valueOf(st) , Toast.LENGTH_SHORT).show();
 		simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		c = Calendar.getInstance();
 		currentTime = simpleDateFormat.format(c.getTime());

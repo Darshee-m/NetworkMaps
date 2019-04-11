@@ -11,14 +11,5 @@
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-	<Button
-		android:id="@+id/next"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:text="Next"
-		android:onClick="nextt"
-		android:layout_marginLeft="30dp" />
-
 
 </RelativeLayout>

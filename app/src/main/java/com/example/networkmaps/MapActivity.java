@@ -19,6 +19,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -42,10 +44,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		gmap=googleMap;
 		MarkerOptions markerOptions = new MarkerOptions();
 
-
-		gmap.addMarker(new MarkerOptions()
-				.position(new LatLng(19, 73))
-				.title("Hello world"));
 		LatLng india=new LatLng(19,73);
 		float zoomlevel=(float)10.0;
 		gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(india,zoomlevel));
@@ -56,32 +54,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //vars
     private Boolean mLocation =false;
     public  GoogleMap gmap;
-    public Button btn;
+
 
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         getLocationPermission();
         dataList=new ArrayList();
-        btn=(Button)findViewById(R.id.next);
+//        btn=(Button)findViewById(R.id.next);
 		database = FirebaseDatabase.getInstance();
 		myRef=database.getReference("data");
     }
 
 
-	public void nextt(View v){
-		LatLng india=new LatLng(19.2020801,73.1610635);
-		CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
-				india, 15);
-		gmap.animateCamera(location);
-		Toast.makeText(this, "next clicked", Toast.LENGTH_SHORT).show();
-		float zoomlevel=(float)18.0;
-		gmap.addMarker(new MarkerOptions()
-				.position(new LatLng(19.2020801,73.1610635))
-				.title("fuck world"));
-
-
-	}
+//	public void nextt(View v){
+//		LatLng india=new LatLng(19.2020801,73.1610635);
+//		CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
+//				india, 15);
+//		gmap.animateCamera(location);
+//		Toast.makeText(this, "next clicked", Toast.LENGTH_SHORT).show();
+//		float zoomlevel=(float)18.0;
+//		gmap.addMarker(new MarkerOptions()
+//				.position(new LatLng(19.2020801,73.1610635))
+//				.title("fuck world").snippet("here i am").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//
+//
+//	}
 
 	@Override
 	protected void onStart() {
@@ -93,13 +91,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 				for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
 					Data data=dataSnapshot1.getValue(Data.class);
 					LatLng mr=new LatLng(data.lat,data.longi);
-					String title="Strength"+data.strength+" \n provider"+data.provider;
+					String title="Strength:"+data.strength;
+					String provider=data.provider;
+					String color;
+					if(data.strength>-70){
+						gmap.addMarker(new MarkerOptions()
+								.position(mr)
+								.title(title)
+								.snippet(provider).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+					}
+					else if(data.strength<-90){
+						gmap.addMarker(new MarkerOptions()
+								.position(mr)
+								.title(title)
+								.snippet(provider).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+					}
+					else{
 
-					gmap.addMarker(new MarkerOptions().position(mr).title(title));
+						gmap.addMarker(new MarkerOptions()
+								.position(mr)
+								.title(title)
+								.snippet(provider).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+					}
+
 				}
-
-
-
 			}
 
 			@Override
