@@ -67,7 +67,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-<<<<<<< HEAD
+
 //	public void nextt(View v){
 //		LatLng india=new LatLng(19.2020801,73.1610635);
 //		CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
@@ -81,7 +81,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //
 //
 //	}
-=======
+
 	public void nextt(View v){
 		LatLng india=new LatLng(19.2020801,73.1610635);
 		CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
@@ -95,7 +95,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 	}
->>>>>>> 8bf617ebd755c34e1101c5a07a9c114eca450096
 
 	@Override
 	protected void onStart() {
