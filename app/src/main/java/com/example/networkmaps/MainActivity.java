@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
 
 		database = FirebaseDatabase.getInstance();
 		myRef=database.getReference("data");
-		myRef.setValue("this is test");
 
 	}
 	void getLocation() {
